@@ -70,7 +70,6 @@
                                 // Options are:
                                 //      IR_MG_CLARK         // Machine gun: Clark protocol (Sony)
                                 //      IR_MG_RCTA          // Machine gun: RCTA protocol
-                                //      IR_SONY             // For general purpose Sony codes
 
 
     

@@ -94,12 +94,11 @@
         #define pin_Button               4          // Input    - Input pushbutton 
 
     // Board LEDs
-        #define pin_RedLED               12         // Output   - Red   LED 
-        #define pin_GreenLED             13         // Output   - Green LED on board 
+        #define pin_BoardLED             13         // Output   - Green LED on Arduino boards
 
     // Transistorized Light outputs
-        #define pin_HitNotifyLEDs        5          // Output   - Hit notification LEDs if using the Tamiya apple. PWM capable (ATmega D5, Timer 0)
-        #define pin_MuzzleFlash          6          // Output   - Trigger output for Taigen High Intensity muzzle flash unit (ATmega D6, Timer 0)
+        #define pin_HitNotifyLEDs        5          // Output   - Hit notification LEDs if using the Tamiya apple. PWM capable
+        #define pin_MuzzleFlash          6          // Output   - Trigger output for Taigen High Intensity muzzle flash unit
 
     // OTHER PINS
     // The remaining pins are defined in their respective libraries: 

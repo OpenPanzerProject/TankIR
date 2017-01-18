@@ -33,6 +33,7 @@
 #include "Tank.h"
 
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
 // GLOBAL VARIABLES
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
 
@@ -75,11 +76,8 @@ void setup()
             pinMode(pin_Button, INPUT_PULLUP);      // Input    - Pushbutton input
     
         // LEDs and Lights
-            pinMode(pin_RedLED, OUTPUT);            // Output   - Red   LED (optional)
-            RedLedOff();
-            pinMode(pin_GreenLED, OUTPUT);          // Output   - Green LED (LED on Arduino boards)
-            GreenLedOff();
-            
+            pinMode(pin_BoardLED, OUTPUT);          // Output   - Green LED (LED on Arduino boards)
+            BoardLedOff();
             pinMode(pin_HitNotifyLEDs, OUTPUT);     // Output   - Hit notification LEDs if using the Tamiya apple. Tank class will initialize to off. 
             pinMode(pin_MuzzleFlash, OUTPUT);       // Output   - Use to trigger a Taigen high-intensity Flash Unit
          
@@ -108,8 +106,9 @@ void setup()
         // The begin function will make sure the recoil servo is initialized to its "battery" position
         RecoilServo->begin();
 
-    // OTHER OBJECTS - BEGIN
+    // BATTLE SETTINGS
     // -------------------------------------------------------------------------------------------------------------------------------------------------->    
+        // Initialize our "Tank" object. These settings are defined in A_Setup.h
         weightClassSettings CustomClassSettings = { CUSTOM_CANNON_RELOAD, CUSTOM_RECOVERY_TIME, CUSTOM_CANNON_HITS, CUSTOM_MG_HITS };
         battle_settings BattleSettings;
         BattleSettings.WeightClass = WEIGHT_CLASS;
@@ -119,27 +118,21 @@ void setup()
         BattleSettings.IR_HitProtocol_2 = IR_HIT_PROTOCOL_ALT;
         BattleSettings.IR_RepairProtocol = IR_REPAIR_PROTOCOL;
         BattleSettings.IR_MGProtocol = IR_MG_PROTOCOL;
-        BattleSettings.Use_MG_Protocol = false;     // We are not firing a machine gun
+        BattleSettings.Use_MG_Protocol = false;                         // We are not firing a machine gun
         BattleSettings.Accept_MG_Damage = MG_DAMAGE;
         BattleSettings.DamageProfile = TAMIYA_DAMAGE;
         BattleSettings.SendTankID = SEND_ID;                                      
         BattleSettings.TankID = TANK_ID;                                              
-        // Now pass the battle settings and other settings to the Tank object
+        // Now pass battle settings to the Tank object
         Tank.begin(BattleSettings, RecoilServo, &timer);
   
-
-    // RANDOM SEED
-    // -------------------------------------------------------------------------------------------------------------------------------------------------->    
-        randomSeed(analogRead(A0));
-
     // DUMP INFO
     // -------------------------------------------------------------------------------------------------------------------------------------------------->        
         DumpBattleInfo();
 
     // LEDS OFF
     // -------------------------------------------------------------------------------------------------------------------------------------------------->        
-        RedLedOff();
-        GreenLedOff();
+        BoardLedOff();
 }
 
 
@@ -168,7 +161,7 @@ void loop()
         PerLoopUpdates();       // Reads the input button, and updates all timers
 
 
-    // CHECK THE BUTTON
+    // PROCESS BUTTON PRESS
     // -------------------------------------------------------------------------------------------------------------------------------------------------->
         switch (ButtonState) 
         {
@@ -186,7 +179,8 @@ void loop()
                     do { delay(10); InputButton.read(); } while (!InputButton.wasReleased());                     
                     ButtonState = BUTTON_WAIT;
 
-                    // Now - you could take some other action here to occur on long button press
+                    // Now you could take some other action here to occur on long button press
+                    // bla bla
                     
                 }
                 break;
@@ -199,7 +193,7 @@ void loop()
         }
 
 
-    // BATTLE 
+    // PROCESS HITS
     // ------------------------------------------------------------------------------------------------------------------------------------------------>  
     // Were we hit? 
     if (Alive) HitType = Tank.WasHit();
@@ -207,8 +201,8 @@ void loop()
     
     if (HitType != HIT_TYPE_NONE)
     {
-        // We flash the onboard LED when IR signals are detected. Turn it off now they are done.
-        GreenLedOff();
+        // We flashed the onboard LED when IR signals were detected. Turn it off now they are done.
+        BoardLedOff();
         
         // We were hit. But was it a damaging hit, or a repair hit? 
         switch (HitType)
@@ -233,6 +227,7 @@ void loop()
                     if (RepairOngoing) { RepairOngoing = REPAIR_NONE; }   // End repair if we were in the middle of one
                 }
                 break;
+            
             case HIT_TYPE_MG:
                 Serial.print(F("MACHINE GUN HIT! (")); 
                 Serial.print(ptrIRName(Tank.LastHitProtocol()));
@@ -241,6 +236,7 @@ void loop()
                 if (RepairOngoing) { Serial.println(F("REPAIR OPERATION CANCELLED")); }
                 if (RepairOngoing) { RepairOngoing = REPAIR_NONE; }   // End repair if we were in the middle of one
                 break;
+            
             case HIT_TYPE_REPAIR:
                 if (!RepairOngoing && Tank.isRepairOngoing()) 
                 {                   
@@ -290,6 +286,9 @@ void loop()
 }
 
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+// CANNON FIRE
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
 void FireCannon()
 {
     if (Tank.CannonReloaded())          // Only fire if reloading is complete
@@ -320,3 +319,156 @@ void FireCannon()
 }
 
 
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+// SIMPLE TIMER AND OTHER LOOP UPDATES
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+// This gets called each time through the main loop. If we have
+// anything that needs to be continuously polled, put it here. 
+void PerLoopUpdates(void)
+{
+    InputButton.read();     // Read the input button
+    timer.run();            // Our simple timer object, used all over the place including by various libraries.  
+
+}
+
+
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+// BOARD LED
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+void BoardLedOn()
+{
+    digitalWrite(pin_BoardLED, HIGH);
+}
+void BoardLedOff()
+{
+    digitalWrite(pin_BoardLED, LOW);
+}
+
+
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+// DEBUG PRINTING
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+void DumpBattleInfo()
+{
+    Serial.println();
+    PrintDebugLine();
+    Serial.println(F("BATTLE INFO"));
+    PrintDebugLine();
+    if (Tank.BattleSettings.IR_FireProtocol != IR_UNKNOWN)
+    {
+    Serial.print(F("Is Repair Tank?   ")); PrintLnYesNo(Tank.isRepairTank());
+    if (Tank.isRepairTank()) { Serial.print(F("Fire Protocol:    ")); Serial.println(ptrIRName(Tank.BattleSettings.IR_RepairProtocol)); }
+    else
+    {
+        Serial.print(F("Fire Protocol:    ")); Serial.print(ptrIRName(Tank.BattleSettings.IR_FireProtocol));
+        if (Tank.BattleSettings.IR_Team != IR_TEAM_NONE) { Serial.print(F(" (Team ")); Serial.print(ptrIRTeam(Tank.BattleSettings.IR_Team)); Serial.print(F(")")); } Serial.println();
+    }
+    Serial.print(F("Hit Protocol 2:   ")); 
+    if (Tank.BattleSettings.IR_HitProtocol_2 != IR_UNKNOWN ) { Serial.println(ptrIRName(Tank.BattleSettings.IR_HitProtocol_2)); } else { Serial.println(F("N/A")); }
+    Serial.print(F("Repaired by:      ")); 
+    if (Tank.BattleSettings.IR_RepairProtocol != IR_UNKNOWN) { Serial.println(ptrIRName(Tank.BattleSettings.IR_RepairProtocol)); } else { Serial.println(F("N/A")); }
+    Serial.print(F("Send MG IR Code:  ")); 
+    if (Tank.BattleSettings.Use_MG_Protocol) { Serial.print(F("Yes (")); Serial.print(ptrIRName(Tank.BattleSettings.IR_MGProtocol)); Serial.println(")"); }
+    else PrintLnYesNo(false);
+    Serial.print(F("Accept MG Damage: ")); 
+    if (Tank.BattleSettings.Accept_MG_Damage) { Serial.print(F("Yes (")); Serial.print(ptrIRName(Tank.BattleSettings.IR_MGProtocol)); Serial.println(")"); }
+    else PrintLnYesNo(false);
+    
+    Serial.print(F("Damage Profile:   ")); Serial.println(ptrDamageProfile(Tank.BattleSettings.DamageProfile));
+    Serial.print(F("Weight Class:     ")); Serial.println(ptrWeightClassName(Tank.BattleSettings.WeightClass)); 
+    Serial.print(F("(")); Serial.print(Tank.BattleSettings.ClassSettings.maxHits); Serial.print(F(" cannon hits, ")); if (Tank.BattleSettings.WeightClass == WC_CUSTOM) { Serial.print(Tank.BattleSettings.ClassSettings.maxMGHits); Serial.print(F(" MG hits, ")); } Serial.print(Convert_mS_to_Sec(Tank.BattleSettings.ClassSettings.reloadTime),1); Serial.print(F(" sec reload, ")); Serial.print(Convert_mS_to_Sec(Tank.BattleSettings.ClassSettings.recoveryTime),1); Serial.println(F(" sec recovery)"));    
+    }
+    else
+    {
+    Serial.println(F("IR & Tank Battling Disabled"));
+    }
+
+    Serial.println();
+    Serial.println();
+    Serial.println();
+}
+
+void PrintDebugLine()
+{
+    for (uint8_t i=0; i<45; i++) { Serial.print(F("-")); }
+    Serial.println(); 
+    Serial.flush();   // This causes a pause until the serial transmission is complete
+}
+
+void PrintSpaceDash()
+{
+    Serial.print(F(" - "));
+}
+
+void PrintSpaceBar()
+{
+    Serial.print(F(" | "));
+}
+
+void PrintSpace()
+{
+    Serial.print(F(" "));
+}    
+
+void PrintSpaces(uint8_t num)
+{
+    if (num == 0) return;
+    for (uint8_t i=0; i<num; i++) { PrintSpace(); }
+}
+
+void PrintLine()
+{
+    Serial.println();
+}
+
+void PrintLines(uint8_t num)
+{    
+    if (num == 0) return;
+    for (uint8_t i=0; i<num; i++) { PrintLine(); }
+}
+
+void PrintTrueFalse(boolean boolVal)
+{
+    if (boolVal == true) { Serial.print(F("TRUE")); } else { Serial.print(F("FALSE")); }
+}
+
+void PrintLnTrueFalse(boolean boolVal)
+{
+    PrintTrueFalse(boolVal);
+    Serial.println();
+}
+
+void PrintYesNo(boolean boolVal)
+{
+    if (boolVal == true) { Serial.print(F("Yes")); } else { Serial.print(F("No")); }
+}
+
+void PrintLnYesNo(boolean boolVal)
+{
+    PrintYesNo(boolVal);
+    Serial.println();
+}
+
+void PrintHighLow(boolean boolVal)
+{
+    if (boolVal == true) { Serial.println(F("HIGH")); } else { Serial.println(F("LOW")); }
+}
+
+void PrintPct(uint8_t pct)
+{
+    Serial.print(pct);
+    Serial.print(F("%"));
+}
+void PrintLnPct(uint8_t pct)
+{
+    PrintPct(pct);
+    Serial.println();
+}
+
+float Convert_mS_to_Sec(int mS)
+{
+    return float(mS) / 1000.0;
+}
