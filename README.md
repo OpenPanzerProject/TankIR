@@ -8,6 +8,7 @@ Several configuration settings are available in the "A_Setup.h" file (it will ap
 
 You can attach a servo to pin D8 and a high intensity flash to D6 and they will also activate whenever the cannon is fired. Please see the schematic PDF for more details. 
 
+Leave your Arduino attached to your computer with a USB cable and open the Serial Monitor from within the Arduino IDE to see informational messages printed during operation. 
 
 ## License
 All Open Panzer firmware is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.
