@@ -1,5 +1,13 @@
-# Introduction
-  * [Open Panzer](http://www.openpanzer.org) is a community project to develop open source products for the RC tank market. 
+# Standalone Tank IR 
+
+The files in the TankIR folder consist of an Arduino sketch that can be loaded onto any Arduino Duemilanove/Uno/Nano or other board with an ATmega328 processor. 
+
+With the addition of an IR receiver and emitter this device can send and receive any RC tank protocol. IR will be sent whenever pin D4 is connected to ground, for example with a pushbutton. 
+
+Several configuration settings are available in the "A_Setup.h" file (it will appear as a tab in your sketch). This includes which protocols are sent and which are received. You can also set the device to send repair signals, and you can even have the device respond by sending a repair signal whenever it receives a "hit" - this could be used for a static tank "repair station." 
+
+You can attach a servo to pin D8 and a high intensity flash to D6 and they will also activate whenever the cannon is fired. Please see the schematic PDF for more details. 
+
 
 ## License
 All Open Panzer firmware is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.
