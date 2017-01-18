@@ -17,7 +17,7 @@ You can connect a standard Tamiya "apple" directly to your Arduino - [Tamiya 534
 
 For the IR transmitter you can use the Tamiya IR LED that is included with the apple. We have also found the Vishay TSAL6100 ([DigiKey 751-1203-ND](http://www.digikey.com/product-detail/en/TSAL6100/751-1203-ND/1681338)) to be a comparable replacement. 
 
-For maximum distance the IR transmitter should be driven far beyond its typical rating. The LED will survive because the IR signal is very brief. In testing we have found a 3.3 ohm, 1 watt resistor to be the best compromise between distance and LED longevity. 
+For maximum distance the IR transmitter should be driven far beyond its typical current rating. The LED will survive because the IR signal is very brief. In testing we have found a 3.3 ohm, 1 watt resistor to be the best compromise between distance and LED longevity. 
 
 If you wish to send repair signals it is often desired to prevent the beam from traveling very far. In this case a higher value resistor is used - we have found 1k ohm will give you a range of just a few feet. 
 
