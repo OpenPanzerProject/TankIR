@@ -10,6 +10,17 @@ You can attach a servo to pin D8 and a high intensity flash to D6 and they will 
 
 Leave your Arduino attached to your computer with a USB cable and open the Serial Monitor from within the Arduino IDE to see informational messages printed during operation. 
 
+
+# Hardware Notes
+
+You can connect a standard Tamiya "apple" directly to your Arduino - [Tamiya 53447](https://www.tamiyausa.com/product/item.php?product-id=53447). The Tamiya apple includes notification LEDs that already have current limiting resistors included. If you build your own receiver and use your own hit notification LEDs, you need to include your own current limiting resistor appropriate to the LEDs you choose. Most Arduinos can't source more than 40mA per pin. 
+
+For the IR transmitter you can use the Tamiya IR LED that is included with the apple. We have also found the Vishay TSAL6100 ([DigiKey 751-1203-ND](http://www.digikey.com/product-detail/en/TSAL6100/751-1203-ND/1681338)) to be a comparable replacement. 
+
+For maximum distance the IR transmitter should be driven far beyond its typical rating. The LED will survive because the IR signal is very brief. In testing we have found a 3.3 ohm, 1 watt resistor to be the best compromise between distance and LED longevity. 
+
+If you wish to send repair signals it is often desired to prevent the beam from traveling very far. In this case a higher value resistor is used - we have found 1k ohm will give you a range of just a few feet. 
+
 ## License
 All Open Panzer firmware is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.
 
