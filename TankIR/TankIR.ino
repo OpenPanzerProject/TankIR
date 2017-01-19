@@ -1,14 +1,14 @@
-/* OpenPanzer IR    A standalone IR tank IR device for use on the Arduino UNO or Nano (or any Arduino compatible with an ATmega328 processor)
+/* OpenPanzer IR    A standalone IR device for use on the Arduino UNO or Nano (or any Arduino compatible with an ATmega328 processor)
  * Source:          openpanzer.org              
  * Authors:         Luke Middleton
  * 
  * Copyright 2017 Open Panzer
- *   
- * For more information, see the Open Panzer Wiki:
- * http://openpanzer.org/wiki/
  * 
- * TCB GitHub Repository:
- * https://github.com/OpenPanzerProject/TCB
+ * Standalone TankIR GitHub Repository with further instructions: 
+ * https://github.com/OpenPanzerProject/TankIR
+ * 
+ * Development thread: 
+ * http://openpanzer.org/forum/index.php?topic=19.0
  *    
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
