@@ -2,7 +2,11 @@
 
 The files in the TankIR folder consist of an Arduino sketch that can be loaded onto any Arduino Duemilanove/Uno/Nano or other board with an ATmega328 processor. 
 
-With the addition of an IR receiver and emitter this sketch can send and receive any RC tank protocol. IR will be sent whenever pin D4 is connected to ground, for example with a pushbutton. 
+With the addition of an IR receiver and emitter this sketch can send and receive any RC tank protocol. 
+
+IR can be sent ("cannon fire") in two ways: 
+  * Whenever pin D4 is connected to ground, for example with a pushbutton. 
+  * Whenever positive 5 volts is detected on pin A0, for example a signal from another device.
 
 Several configuration settings are available in the "A_Setup.h" file (it will appear as a tab in your sketch). These include which protocols are sent and which are received. You can also set the device to send repair signals, and you can even have the device respond by sending a repair signal whenever it receives a "hit" - this could be used for a static tank "repair station." 
 
