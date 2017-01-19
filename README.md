@@ -4,16 +4,16 @@ The files in the TankIR folder consist of an Arduino sketch that can be loaded o
 
 With the addition of an IR receiver and emitter this sketch can send and receive any RC tank protocol. IR will be sent whenever pin D4 is connected to ground, for example with a pushbutton. 
 
-Several configuration settings are available in the "A_Setup.h" file (it will appear as a tab in your sketch). This includes which protocols are sent and which are received. You can also set the device to send repair signals, and you can even have the device respond by sending a repair signal whenever it receives a "hit" - this could be used for a static tank "repair station." 
+Several configuration settings are available in the "A_Setup.h" file (it will appear as a tab in your sketch). These include which protocols are sent and which are received. You can also set the device to send repair signals, and you can even have the device respond by sending a repair signal whenever it receives a "hit" - this could be used for a static tank "repair station." 
 
-You can attach a recoil servo to pin D8 and a Taigen High Intensity flash to D6 and they will also activate whenever the cannon is fired. Please see the schematic PDF for more details. 
+You can attach a recoil servo to pin D8 and a Taigen High Intensity flash to D6 and they will also activate whenever the cannon is fired. Please see the schematic PDF for more details. Recoil servo end points and retract and return times can all be adjusted in the A_Setup.h file.  
 
 Leave your Arduino attached to your computer with a USB cable and open the Serial Monitor from within the Arduino IDE to see informational messages printed during operation. 
 
 
 # Hardware Notes
 
-You can connect a standard Tamiya "apple" directly to your Arduino - [Tamiya 53447](https://www.tamiyausa.com/product/item.php?product-id=53447). The Tamiya apple combines an IR receiver and notification LEDs; the LEDs already have current limiting resistors included inside the apple. If you build your own receiver and use your own hit notification LEDs, you need to include your own current limiting resistor appropriate to the LEDs you choose. Most Arduinos can't source more than 40mA per pin. 
+You can connect a standard Tamiya "apple" directly to your Arduino ([Tamiya 53447](https://www.tamiyausa.com/product/item.php?product-id=53447)). The Tamiya apple combines an IR receiver and notification LEDs; the LEDs already have current limiting resistors included inside the apple. If you build your own receiver and use your own hit notification LEDs, you need to include your own current limiting resistor appropriate to the LEDs you choose. Most Arduinos can't source more than 40mA per pin. 
 
 For the IR transmitter you can use the Tamiya IR LED that is included with the apple. We have also found the Vishay TSAL6100 ([DigiKey 751-1203-ND](http://www.digikey.com/product-detail/en/TSAL6100/751-1203-ND/1681338)) to be a comparable replacement. 
 
