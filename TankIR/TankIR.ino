@@ -58,8 +58,9 @@
     uint8_t RepairOngoing = REPAIR_NONE;          // Init 
 
 // INPUT BUTTON
-    OP_Button InputButton = OP_Button(pin_Button, true, true, 25);   // Initialize a button object. Set pin, internal pullup = true, inverted = true, debounce time = 25 mS
-    
+    OP_Button InputButton = OP_Button(pin_Button, true, true, 25);              // Initialize a button object. Set pin, internal pullup = true, inverted = true, debounce time = 25 mS
+
+
 
 void setup()
 {   // Here we get everything started. Begin with the most important things, and keep going in descending order
@@ -74,7 +75,16 @@ void setup()
 
         // Pushbutton - held to ground when pushed
             pinMode(pin_Button, INPUT_PULLUP);      // Input    - Pushbutton input
-    
+
+        // Positive voltage trigger - goes high when activated
+            pinMode(pin_VoltageTrigger, INPUT);     // Input    - In this case we do NOT want the pullup resistor enabled. 
+            digitalWrite(pin_VoltageTrigger, LOW);  //          - This statement makes certain the internal pullup is disconnected. We will use an external pull-down resistor (to ground)
+                                                    //            to keep the pin negative until a signal is received. 
+            // Now setup a pin change interrupt on this pin
+            *digitalPinToPCMSK(pin_VoltageTrigger) |= bit (digitalPinToPCMSKbit(pin_VoltageTrigger));       // enable pin change interrupt
+            PCIFR  |= bit (digitalPinToPCICRbit(pin_VoltageTrigger));                                       // clear any outstanding interrupt
+            PCICR  |= bit (digitalPinToPCICRbit(pin_VoltageTrigger));                                       // enable interrupt for the group
+   
         // LEDs and Lights
             pinMode(pin_BoardLED, OUTPUT);          // Output   - Green LED (LED on Arduino boards)
             BoardLedOff();
@@ -133,6 +143,8 @@ void setup()
     // LEDS OFF
     // -------------------------------------------------------------------------------------------------------------------------------------------------->        
         BoardLedOff();
+        timer.setInterval(500, BoardLedOff);    // Because of some quirks in the way the IR receive library works, the board LED (which we use to indicate incoming IR whether decoded or not), 
+                                                // can often be left hanging in the on position. This timer will check every 500 mS and turn it off. 
 }
 
 
@@ -286,6 +298,28 @@ void loop()
 }
 
 
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+// CANNON FIRE
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+// Pin change interrupt service routine for pins A0 - A5
+// We use this to detect a positive voltage on pin_VoltageTrigger (A0) and if we do, fire the cannon. 
+ISR (PCINT1_vect) 
+{
+    static unsigned long last_interrupt_time = 0;
+    unsigned long interrupt_time = millis(); 
+    
+    // Check if the pin is high, and if it has been more than some minimum length of time since the last interrupt
+    if (digitalRead(pin_VoltageTrigger) == HIGH &&  (interrupt_time - last_interrupt_time > 250))   // 250 mS = 1/4 second
+    {  
+        // Pin went high - fire the cannon
+        FireCannon();
+    }
+    last_interrupt_time = interrupt_time;
+}  
+
+
+
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
 // CANNON FIRE
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
@@ -329,7 +363,6 @@ void PerLoopUpdates(void)
 {
     InputButton.read();     // Read the input button
     timer.run();            // Our simple timer object, used all over the place including by various libraries.  
-
 }
 
 
@@ -472,3 +505,5 @@ float Convert_mS_to_Sec(int mS)
 {
     return float(mS) / 1000.0;
 }
+
+

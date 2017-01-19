@@ -91,12 +91,16 @@
 // ------------------------------------------------------------------------------------------------------------------------------------------------------->>
     
     // Pushbutton
-        #define pin_Button               4          // Input    - Input pushbutton 
+        #define pin_Button               4          // Input    - Input pushbutton, used to fire the cannon manually
+
+    // Positive voltage input
+        #define pin_VoltageTrigger      A0          // Input    - Apply a positive 5v signal to this pin to fire the cannon
+                                                    //            This needs to be one of the pins between A0 and A5 or else you will need to change the interrupt code
 
     // Board LEDs
-        #define pin_BoardLED             13         // Output   - Green LED on Arduino boards
+        #define pin_BoardLED            13          // Output   - Green LED on Arduino boards
 
-    // Transistorized Light outputs
+    // Light outputs
         #define pin_HitNotifyLEDs        5          // Output   - Hit notification LEDs if using the Tamiya apple. PWM capable
         #define pin_MuzzleFlash          6          // Output   - Trigger output for Taigen High Intensity muzzle flash unit
 
