@@ -8,14 +8,16 @@ IR can be sent ("cannon fire") in two ways:
   * Whenever pin D4 is connected to ground, for example with a pushbutton. 
   * Whenever positive 5 volts is detected on pin A0, for example a signal from another device.
 
-Several configuration settings are available in the "A_Setup.h" file (it will appear as a tab in your sketch). These include which protocols are sent and which are received. You can also set the device to send repair signals, and you can even have the device respond by sending a repair signal whenever it receives a "hit" - this could be used for a static tank "repair station." 
+You can attach a recoil servo to pin D8 and a Taigen High Intensity flash to D6 and they will also activate whenever the cannon is fired. 
 
-You can attach a recoil servo to pin D8 and a Taigen High Intensity flash to D6 and they will also activate whenever the cannon is fired. Please see the schematic PDF for more details. Recoil servo end points and retract and return times can all be adjusted in the A_Setup.h file.  
+Several configuration settings are available in the "A_Setup.h" file (it will appear as a tab in your sketch). Recoil servo end points and retract and return times can all be adjusted in this file, as well as which protocols are sent and which are received. You can also set the device to send repair signals, and you can even have the device respond by sending a repair signal whenever it receives a "hit" - this would be useful for a static tank "repair station." 
 
 Leave your Arduino attached to your computer with a USB cable and open the Serial Monitor from within the Arduino IDE to see informational messages printed during operation. 
 
 
 # Hardware Notes
+
+Please see the schematic PDF for information on wiring. An Arduino Nano is shown but the pins are the same for the Uno. 
 
 You can connect a standard Tamiya "apple" directly to your Arduino ([Tamiya 53447](https://www.tamiyausa.com/product/item.php?product-id=53447)). The Tamiya apple combines an IR receiver and notification LEDs; the LEDs already have current limiting resistors included inside the apple. If you build your own receiver and use your own hit notification LEDs, you need to include your own current limiting resistor appropriate to the LEDs you choose. Most Arduinos can't source more than 40mA per pin. 
 
