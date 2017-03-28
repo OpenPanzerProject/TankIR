@@ -93,8 +93,17 @@ void setup()
          
     // TIMERS
     // -------------------------------------------------------------------------------------------------------------------------------------------------->
-    // These are macros, see Settings.h for definitions
-        SetupTimer1();
+    // We set up Timer 1 in Normal Mode: count starts from BOTTOM (0), goes to TOP (0xFFFF / 65,535), then rolls over. 
+    // We set prescaler to 8. With a 16MHz clock that gives us 1 clock tick every 0.5 uS (0.0000005 seconds).
+    // The rollover will occur roughly every 32.7 mS (0.0327 seconds). These settings are dictated by TCCR1A and TCCR1B.
+    // We also clear all interrupt flags to start (write 1 to respective bits of TIFR1). 
+    // And we start off with all interrupts disabled (write 0 to all bits in TIMSK1). 
+        TCCR1A = 0x00;
+        TCCR1B = 0x02;
+        TIFR1 =  0x2F;
+        TIMSK1 = 0x00;
+        TCNT1 = 0;
+
         
     // MOTOR OBJECTS
     // -------------------------------------------------------------------------------------------------------------------------------------------------->    
@@ -105,7 +114,7 @@ void setup()
     // We still pass an external min/max speed although it won't be used for this object. 
     // What will be used are recoil/return times, along with a reverse setting if the servo needs to be reversed. These can be modified
     // later but will be initialized to sensible defaults.
-        #define SERVONUM_RECOIL     0   // Recoil servo is servo #0 (Port B0)
+        ESC_POS_t SERVONUM_RECOIL = 0;  // Recoil servo is servo #0 (Port B0)
         RecoilServo = new Servo_RECOIL (SERVONUM_RECOIL,MOTOR_MAX_REVSPEED,MOTOR_MAX_FWDSPEED,0,RECOIL_MS,RETURN_MS,REVERSE_RECOIL);  
         // Recoil servos also have custom end-points. Because RecoilServo is a motor of class Servo, we can call setMin/MaxPulseWidth from the servo class directly, rather than from TankServos
         RecoilServo->setMinPulseWidth(SERVONUM_RECOIL, RECOIL_SERVO_EP_MIN);
@@ -346,7 +355,7 @@ void FireCannon()
             if (!Tank.isRepairOngoing())
             {
                 Serial.println(F("Fire Cannon"));  
-                Tank.Fire(); // See OP_Tank library. This triggers the mechanical and servo recoils, the high intensity flash unit, the cannon sound, and it sends the IR signal
+                Tank.Fire(); // See OP_Tank library. This starts the servo recoil, triggers the high intensity flash unit, and it sends the IR signal
             }
         }
     }

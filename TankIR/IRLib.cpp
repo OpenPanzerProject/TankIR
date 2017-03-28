@@ -69,22 +69,10 @@
 #define PRESCALE 8      // timer clock prescale
 #define CLKSPERUSEC (SYSCLOCK/PRESCALE/1000000)   // timer clocks per microsecond
 
+// This function has been stripped and will only work on Arduino Uno or other ATmega328! 
 unsigned char Pin_from_Intr(unsigned char inum) 
 {
-  const unsigned char PROGMEM attach_to_pin[]= {
-    #if defined(__AVR_ATmega256RFR2__)//Assume Pinoccio Scout
-        4,5,SCL,SDA,RX1,TX1,7
-    #elif defined(__AVR_ATmega32U4__) //Assume Arduino Leonardo
-        3,2,0,1,7
-    #elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)//Assume Arduino Mega 
-        2,3, 21, 20, 19, 18
-    #else   //Assume Arduino Uno or other ATmega328
-        2, 3
-    #endif
-    };
-    #if defined(ARDUINO_SAM_DUE)
-        return inum;
-    #endif
+    const unsigned char attach_to_pin[]= {2, 3};
     if (inum<sizeof attach_to_pin) 
     {   //note this works because we know it's one byte per entry
         return attach_to_pin[inum];
@@ -1189,7 +1177,13 @@ void IRsendBase::enableIROut(unsigned char khz)
     // Set the output pin
     pinMode(IR_SEND_PWM_PIN, OUTPUT);  
     digitalWrite(IR_SEND_PWM_PIN, LOW); // When not sending PWM, we want it low    
-    IR_SEND_CONFIG_KHZ(khz);            // Configure frequency
+    
+    // This sets up the modulation frequency in kilohertz
+    uint8_t pwmval = SYSCLOCK / 2000 / (khz);
+    TCCR2A = _BV(WGM20);
+    TCCR2B = _BV(WGM22) | _BV(CS20);
+    OCR2A = pwmval; 
+    OCR2B = pwmval / 3;
 }
 
 // Timer1 Output Compare B interrupt service routine

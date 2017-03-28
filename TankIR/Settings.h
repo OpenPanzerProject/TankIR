@@ -26,17 +26,10 @@
     // [] OP_Servos - uses Timer 1's Output Compare A to set a timed interrupt to generate servo pulse widths
     // [] IRsendBase - uses Timer 1's Output Compare B to set a timed interrupt to generate infra-red pulses. IRsend also uses Timer 2 for the actual PWM.
 
-    // We set up Timer 1 in Normal Mode: count starts from BOTTOM (0), goes to TOP (0xFFFF / 65,535), then rolls over. 
+    // Timer 1 is setup in the setup() function of the main skech (TankIR)
+    // It is setup in Normal Mode: count starts from BOTTOM (0), goes to TOP (0xFFFF / 65,535), then rolls over. 
     // We set prescaler to 8. With a 16MHz clock that gives us 1 clock tick every 0.5 uS (0.0000005 seconds).
     // The rollover will occur roughly every 32.7 mS (0.0327 seconds). These settings are dictated by TCCR1A and TCCR1B.
-    // We also clear all interrupt flags to start (write 1 to respective bits of TIFR1). 
-    // And we start off with all interrupts disabled (write 0 to all bits in TIMSK1). 
-    #define SetupTimer1() ({ \  
-        TCCR1A = 0x00;       \
-        TCCR1B = 0x02;       \
-        TIFR1 =  0x2F;       \
-        TIMSK1 = 0x00;       \
-        TCNT1 = 0; })
     
     // We also need to let these libraries know what the conversion is between ticks and uS
     #define IR_uS_TO_TICKS(s)       (s*2)       // For IR sending
@@ -59,12 +52,6 @@
     #define IR_SEND_PWM_PIN         3                               // Arduino pin 3
     #define IR_SEND_PWM_START       (TCCR2A |= _BV(COM2B1))         // Macro to connect OC2B to PWM pin
     #define IR_SEND_PWM_STOP        (TCCR2A &= ~(_BV(COM2B1)))      // Macro to disconnect OC2B from PWM pin
-    // This sets up the modulation frequency in kilohertz
-    #define IR_SEND_CONFIG_KHZ(val) ({ \
-                                    const uint8_t pwmval = SYSCLOCK / 2000 / (val); \
-                                    TCCR2A = _BV(WGM20);  TCCR2B = _BV(WGM22) | _BV(CS20); \
-                                    OCR2A = pwmval; OCR2B = pwmval / 3; })
-    
 
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------->>
