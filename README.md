@@ -27,6 +27,9 @@ For maximum distance the IR transmitter should be driven far beyond its typical 
 
 If you wish to send repair signals it is often desired to prevent the beam from traveling very far. In this case a higher value resistor is used inline with the IR emitter - we have found 1k ohm will give you a range of just a few feet. 
 
+# Example project
+See this thread over at RC Tank Warfare where this project is interfaced with a standard Heng Long board to add Tamiya IR compatibility: [Arduino UNO IR Battle System](https://www.rctankwarfare.co.uk/forums/viewtopic.php?f=81&t=21941).
+
 ## License
 All Open Panzer firmware is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.
 
