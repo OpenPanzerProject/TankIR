@@ -52,6 +52,8 @@ Of course you will also need to provide power to your Audio FX board. See the [A
 # Example project
 See this thread over at RC Tank Warfare where this project is interfaced with a standard Heng Long board to add Tamiya IR compatibility: [Arduino UNO IR Battle System](https://www.rctankwarfare.co.uk/forums/viewtopic.php?f=81&t=21941).
 
+See also this RC Tank Warfare thread: [How to build a working IR Artillery Gun](https://www.rctankwarfare.co.uk/forums/viewtopic.php?f=208&t=22849)
+
 ## License
 All Open Panzer firmware is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.
 
