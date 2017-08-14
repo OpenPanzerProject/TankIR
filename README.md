@@ -27,6 +27,28 @@ For maximum distance the IR transmitter should be driven far beyond its typical 
 
 If you wish to send repair signals it is often desired to prevent the beam from traveling very far. In this case a higher value resistor is used inline with the IR emitter - we have found 1k ohm will give you a range of just a few feet. 
 
+## Interfacing With Adafruit Audio FX Boards
+You can add sound to your project by interfacting with an Adafruit Audio FX board. Adafruit sells several versions of this product with different amounts of on-board memory and different outputs. Unless you are using an external amplifier, you probably want the ones with a built-in amp, such as this [16 MB version](https://www.adafruit.com/product/2217) or this [2 MB version](https://www.adafruit.com/product/2210), both with built-in 2W amplifiers. 
+
+Add the following sounds with the names shown to the FX board (plug it into your computer and just drag and drop the files): 
+  * T01.wav - your cannon fire sound
+  * T02.wav - your cannon "hit" sound (sound to play when device receives an IR hit)
+  * T03.wav - your destroyed sound (device has received enough hits to be destroyed)
+  * T04.wav - repair sound (sound that will play if being repaired, or if a repair station, a repair signal being sent out)
+
+Now you must connect your Arduino to the Audio FX board
+
+| Arduino Pin   | Audio FX Pin  |
+| ------------- |---------------|
+| A1      | 1 |
+| A2      | 2 |
+| A3      | 3 |
+| A4      | 4 |
+| GND     | GND |
+
+Of course you will also need to provide power to your Audio FX board. See the [Adafruit Tutorial](https://learn.adafruit.com/adafruit-audio-fx-sound-board/overview) for more information on their device. 
+
+
 # Example project
 See this thread over at RC Tank Warfare where this project is interfaced with a standard Heng Long board to add Tamiya IR compatibility: [Arduino UNO IR Battle System](https://www.rctankwarfare.co.uk/forums/viewtopic.php?f=81&t=21941).
 
