@@ -90,6 +90,18 @@ void setup()
             BoardLedOff();
             pinMode(pin_HitNotifyLEDs, OUTPUT);     // Output   - Hit notification LEDs if using the Tamiya apple. Tank class will initialize to off. 
             pinMode(pin_MuzzleFlash, OUTPUT);       // Output   - Use to trigger a Taigen high-intensity Flash Unit
+
+        // Audio FX triggers
+            pinMode(pin_FIRE_CANNON_TRIGGER, OUTPUT);
+            pinMode(pin_RECEIVE_HIT_TRIGGER, OUTPUT);
+            pinMode(pin_VEHICLE_DESTROYED_TRIGGER, OUTPUT);
+            pinMode(pin_VEHICLE_REPAIR_TRIGGER, OUTPUT);
+            // The Audio FX boards consider input held to ground the trigger, so start with these outputs HIGH
+            digitalWrite(pin_FIRE_CANNON_TRIGGER, HIGH);
+            digitalWrite(pin_RECEIVE_HIT_TRIGGER, HIGH);
+            digitalWrite(pin_VEHICLE_DESTROYED_TRIGGER, HIGH);
+            digitalWrite(pin_VEHICLE_REPAIR_TRIGGER, HIGH);
+
          
     // TIMERS
     // -------------------------------------------------------------------------------------------------------------------------------------------------->
@@ -263,6 +275,7 @@ void loop()
                 {                   
                     // This marks the start of a repair operation
                     RepairOngoing = REPAIR_SELF;    // Repair self, meaning, we are the one being repaired
+                    TriggerRepairSound();           // Play the repair sound
                     Serial.print(F("VEHICLE REPAIR STARTED (")); 
                     Serial.print(ptrIRName(Tank.LastHitProtocol()));
                     Serial.println(F(")"));                    
@@ -282,7 +295,17 @@ void loop()
         {
             Serial.println(F("TANK DESTROYED")); 
             Alive = false;
+            TriggerDesroyedSound(); 
         }
+        else
+        {
+            // If not destroyed, but we were hit with a damaging hit, play hit sound
+             if (HitType != HIT_TYPE_REPAIR && HitType != HIT_TYPE_NONE) 
+             {
+                TriggerHitReceivedSound();
+             }
+        }
+        
     }
 
     // Were we in a repair operation, and now is it complete? 
@@ -347,6 +370,7 @@ void FireCannon()
                
                 // Now fire the repair signal. 
                 Tank.Fire(); 
+                TriggerRepairSound();
             }
         }
         else
@@ -356,11 +380,62 @@ void FireCannon()
             {
                 Serial.println(F("Fire Cannon"));  
                 Tank.Fire(); // See OP_Tank library. This starts the servo recoil, triggers the high intensity flash unit, and it sends the IR signal
+                TriggerCannonSound();
             }
         }
     }
 }
 
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+// Adafruit Audio FX board triggers
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
+// Adafruit offers several Audio FX boards with different amounts of on-board memory and outputs. Unless you are using an external amplifier, you probably want the ones
+// with a built-in amp
+// Adafruit Audio FX Sound Board + 2x2W Amp - 16MB capacity: https://www.adafruit.com/product/2217
+// Adafruit Audio FX Sound Board + 2x2W Amp - 2MB  capacity: https://www.adafruit.com/product/2210
+// According to documentation pin must be held to ground for approximately 125 mS
+#define LENGTH_ADAFRUIT_FX_HELD_TO_GROUND   200                                 // 200 mS should be plenty of time
+// Cannon fire sound
+void TriggerCannonSound(void)
+{
+    digitalWrite(pin_FIRE_CANNON_TRIGGER, LOW);                                 // Set pin to ground
+    timer.setTimeout(LENGTH_ADAFRUIT_FX_HELD_TO_GROUND, ClearCannonSoundPin);   // Keep it to ground briefly
+}
+void ClearCannonSoundPin(void)
+{
+    digitalWrite(pin_FIRE_CANNON_TRIGGER, HIGH);                                 // Trigger is done, set pin back to high
+}
+// Hit received sound
+void TriggerHitReceivedSound(void)
+{
+    digitalWrite(pin_RECEIVE_HIT_TRIGGER, LOW);                                 // Set pin to ground
+    timer.setTimeout(LENGTH_ADAFRUIT_FX_HELD_TO_GROUND, ClearHitReceivedSoundPin);   // Keep it to ground briefly
+}
+void ClearHitReceivedSoundPin(void)
+{
+    digitalWrite(pin_RECEIVE_HIT_TRIGGER, HIGH);                                 // Trigger is done, set pin back to high
+}
+// Vehicle destroyed sound
+void TriggerDesroyedSound(void)
+{
+    digitalWrite(pin_VEHICLE_DESTROYED_TRIGGER, LOW);                           // Set pin to ground
+    timer.setTimeout(LENGTH_ADAFRUIT_FX_HELD_TO_GROUND, ClearDestroyedSoundPin); // Keep it to ground briefly
+}
+void ClearDestroyedSoundPin(void)
+{
+    digitalWrite(pin_VEHICLE_DESTROYED_TRIGGER, HIGH);                          // Trigger is done, set pin back to high
+}
+// Repair sound
+void TriggerRepairSound(void)
+{
+    digitalWrite(pin_VEHICLE_REPAIR_TRIGGER, LOW);                              // Set pin to ground
+    timer.setTimeout(LENGTH_ADAFRUIT_FX_HELD_TO_GROUND, ClearRepairSoundPin);   // Keep it to ground briefly
+}
+void ClearRepairSoundPin(void)
+{
+    digitalWrite(pin_VEHICLE_REPAIR_TRIGGER, HIGH);                             // Trigger is done, set pin back to high
+}
 
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>

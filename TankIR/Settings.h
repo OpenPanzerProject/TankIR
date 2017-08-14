@@ -91,6 +91,17 @@
         #define pin_HitNotifyLEDs        5          // Output   - Hit notification LEDs if using the Tamiya apple. PWM capable
         #define pin_MuzzleFlash          6          // Output   - Trigger output for Taigen High Intensity muzzle flash unit
 
+    // Adafruit Audio FX board triggers
+    // Adafruit offers several Audio FX boards with different amounts of on-board memory and outputs. Unless you are using an external amplifier, you probably want the ones
+    // with a built-in amp
+    // Adafruit Audio FX Sound Board + 2x2W Amp - 16MB capacity: https://www.adafruit.com/product/2217
+    // Adafruit Audio FX Sound Board + 2x2W Amp - 2MB  capacity: https://www.adafruit.com/product/2210
+        #define pin_FIRE_CANNON_TRIGGER         A1
+        #define pin_RECEIVE_HIT_TRIGGER         A2
+        #define pin_VEHICLE_DESTROYED_TRIGGER   A3
+        #define pin_VEHICLE_REPAIR_TRIGGER      A4
+        
+
     // OTHER PINS
     // The remaining pins are defined in their respective libraries: 
         // - 4 Servos (top of OP_Servo.cpp - first 4 of PORTB (Arduino 8-11)
