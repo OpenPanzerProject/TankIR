@@ -82,7 +82,7 @@ typedef char IRTYPES;
 #define IR_TAMIYA_2SHOT     2       // Tamiya 2-shot kill code
 #define IR_TAMIYA_35        3
 #define IR_HENGLONG         4
-#define IR_TAIGEN           5
+#define IR_TAIGEN_V1        5       // Original Taigen V1 boards
 #define IR_FOV              6       // No longer being sold. Taigen is going to re-release them but we still don't know if they will use the same IR or not. 
 #define IR_VSTANK           7
 #define IR_OPENPANZER       8       // Not yet implemented. For future custom IR codes.
@@ -92,8 +92,9 @@ typedef char IRTYPES;
 #define IR_MG_CLARK         12      // Machine gun: Clark protocol (Sony)
 #define IR_MG_RCTA          13      // Machine gun: RCTA protocol
 #define IR_SONY             14      // For general purpose Sony codes
+#define IR_TAIGEN           15      // Taigen V2, V3 motherboards
 //#define ADDITIONAL (number) 
-#define LAST_IRPROTOCOL IR_SONY
+#define LAST_IRPROTOCOL IR_TAIGEN
 const __FlashStringHelper *ptrIRName(IRTYPES Type); //Returns a character string that is name of protocol.
 
 // TEAM DEFINITIONS
@@ -170,6 +171,10 @@ class IRdecodeHengLong: public virtual IRdecodeBase
 {   public:
         virtual bool decode(void);
 };
+class IRdecodeTaigenV1: public virtual IRdecodeBase 
+{   public:
+        virtual bool decode(void);
+};
 class IRdecodeTaigen: public virtual IRdecodeBase 
 {   public:
         virtual bool decode(void);
@@ -213,6 +218,7 @@ class IRdecode:
     public virtual IRdecodeTamiya_2Shot,
     public virtual IRdecodeTamiya35,
     public virtual IRdecodeHengLong,
+    public virtual IRdecodeTaigenV1,
     public virtual IRdecodeTaigen,
     public virtual IRdecodeFOV,
     public virtual IRdecodeVsTank,
@@ -358,6 +364,10 @@ class IRsendHengLong: public virtual IRsendBase
 {   public:
         void send(void); 
 };
+class IRsendTaigenV1: public virtual IRsendBase
+{   public:
+        void send(void);
+};
 class IRsendTaigen: public virtual IRsendBase
 {   public:
         void send(void);
@@ -425,6 +435,7 @@ class IRsend:
     public virtual IRsendTamiya_2Shot,
     public virtual IRsendTamiya35,
     public virtual IRsendHengLong,
+    public virtual IRsendTaigenV1,
     public virtual IRsendTaigen,
     public virtual IRsendFOV,
     public virtual IRsendVsTank,

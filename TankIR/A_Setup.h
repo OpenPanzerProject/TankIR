@@ -34,7 +34,8 @@
                                 //      IR_TAMIYA_2SHOT     // Tamiya 2-shot kill code
                                 //      IR_TAMIYA_35        // Tamiya 1/35 scale IR
                                 //      IR_HENGLONG         // Heng Long
-                                //      IR_TAIGEN           // Taigen
+                                //      IR_TAIGEN_V1        // Original Taigen V1 motherboards
+                                //      IR_TAIGEN           // For Taigen V2 and V3 motherboards
                                 //      IR_FOV              // Forces of Valor 1/24 scale tanks, no longer being sold. Taigen is going to re-release them but we still don't know if they will use the same IR or not. 
                                 //      IR_VSTANK           // VsTank 1/24 scale protocol
                                 //      IR_OPENPANZER       // Not yet implemented. For future custom IR codes.

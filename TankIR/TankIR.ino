@@ -2,7 +2,7 @@
  * Source:          openpanzer.org              
  * Authors:         Luke Middleton
  * 
- * Copyright 2017 Open Panzer
+ * Copyright 2018 Open Panzer
  * 
  * Standalone TankIR GitHub Repository with further instructions: 
  * https://github.com/OpenPanzerProject/TankIR
