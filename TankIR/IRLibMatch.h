@@ -44,8 +44,10 @@
 // pulse parameters are in uSec (micro-seconds). 1000 uSec = 1mS = 0.001 second
 #define Tamiya_BITS         3       // 2 marks and 1 space
 #define Tamiya_GAP          8000
-#define Tamiya_TIMESTOSEND  10      // Tamiya repeats the signal 50 times which takes 1 second (overkill). We default to only 10 repetitions which takes 1/5 second. 
-                                    // This reduces the effect of the notorious "fan" shot
+#define Tamiya_TIMESTOSEND  50      // Tamiya repeats the signal 50 times which takes 1 second. This is overkill and makes possible the infamous "fan shot." We initially set the TCB to 
+									// only repeat a more reasonably 10 times, which takes 1/5 second. However, the new Heng Long 6+ boards only seem to accept hits when the signal is 
+									// sent for the full length of time, and whatever its faults, it may be best to remain consistent with the Tamiya method, so we are now repeating for 
+									// the full 1 second (50 times)
 const PROGMEM uint16_t Tamiya16Sig[Tamiya_BITS+1] = {3000, 3000, 6000, Tamiya_GAP}; // Add 1 to include gap
 const PROGMEM uint16_t Tamiya16TwoShotSig[Tamiya_BITS+1] = {4000, 5000, 3000, Tamiya_GAP}; // Add 1 to include gap
 
@@ -147,8 +149,8 @@ const PROGMEM uint16_t IBU2RepairSig[IBU2_BITS] = {10000,5000,15000,10000};
 
 
 // Ken Shirriff did some testing that found the length of a mark pulse is typically over reported and the length of a space underreported
-// by the hardware internal to infrared receivers. The length of a received mark was found to be about 100µs too long and a space 100µs too short. 
-// Chris Young, who developed the IRLib classes, felt 50µs was a better value. 
+// by the hardware internal to infrared receivers. The length of a received mark was found to be about 100ï¿½s too long and a space 100ï¿½s too short. 
+// Chris Young, who developed the IRLib classes, felt 50ï¿½s was a better value. 
 // In my own testing 50 seemed to work better than 100. The receivers are plenty accurate and especially with the short signals like Sony and Taigen, 
 // once you start adding/subtracting even 100 uS to the pulses you are less likely to get a reading. 
 // If you want to change the default, change the definition below. 
@@ -190,17 +192,30 @@ const PROGMEM uint16_t IBU2RepairSig[IBU2_BITS] = {10000,5000,15000,10000};
 
 
 #ifdef OP_IRLib_TRACE
-void OP_IRLib_ATTEMPT_MESSAGE(const __FlashStringHelper * s);
-void OP_IRLib_TRACE_MESSAGE(const __FlashStringHelper * s);
-byte OP_IRLib_REJECTION_MESSAGE(const __FlashStringHelper * s);
-byte OP_IRLib_DATA_ERROR_MESSAGE(const __FlashStringHelper * s, unsigned char index, unsigned int value, unsigned int expected);
-#define RAW_COUNT_ERROR OP_IRLib_REJECTION_MESSAGE(F("number of raw samples"));
-#define DATA_ERROR(data, expected) OP_IRLib_DATA_ERROR_MESSAGE(F("data error"),offset,data,expected);
-#define HEADER_MARK_ERROR(expected) OP_IRLib_DATA_ERROR_MESSAGE(F("header mark"),offset,rawbuf[offset],expected);
-#define HEADER_SPACE_ERROR(expected) OP_IRLib_DATA_ERROR_MESSAGE(F("header space"),offset,rawbuf[offset],expected);
-#define DATA_MARK_ERROR(expected) OP_IRLib_DATA_ERROR_MESSAGE(F("data mark"),offset,rawbuf[offset],expected);
-#define DATA_SPACE_ERROR(expected) OP_IRLib_DATA_ERROR_MESSAGE(F("data space"),offset,rawbuf[offset],expected);
-#define TRAILER_BIT_ERROR(expected) OP_IRLib_DATA_ERROR_MESSAGE(F("RC5/RC6 trailer bit length"),offset,rawbuf[offset],expected);
+void OP_IRLib_ATTEMPT_MESSAGE(const __FlashStringHelper * s) 
+{ 
+    Serial.print("Attempt decode of: "); Serial.println(s); 
+}
+void OP_IRLib_TRACE_MESSAGE(const __FlashStringHelper * s) 
+{ 
+    Serial.print("Trace :"); Serial.println(s); 
+}
+byte OP_IRLib_REJECTION_MESSAGE(const __FlashStringHelper * s)
+{
+    Serial.println(s);
+}
+byte OP_IRLib_DATA_ERROR_MESSAGE(const __FlashStringHelper * s, unsigned char index, unsigned int value, unsigned int expected)
+{
+    Serial.print(s); Serial.print(" error at offset: "); Serial.print(index); Serial.print(" with value: "); Serial.print(value); Serial.print(" Expected: "); Serial.println(expected); 
+}
+
+#define RAW_COUNT_ERROR OP_IRLib_REJECTION_MESSAGE(F("Number of raw samples"));
+#define DATA_ERROR(data, expected) OP_IRLib_DATA_ERROR_MESSAGE(F("Data "),offset,data,expected);
+#define HEADER_MARK_ERROR(expected) OP_IRLib_DATA_ERROR_MESSAGE(F("Header mark "),offset,rawbuf[offset],expected);
+#define HEADER_SPACE_ERROR(expected) OP_IRLib_DATA_ERROR_MESSAGE(F("Header space "),offset,rawbuf[offset],expected);
+#define DATA_MARK_ERROR(expected) OP_IRLib_DATA_ERROR_MESSAGE(F("Data mark "),offset,rawbuf[offset],expected);
+#define DATA_SPACE_ERROR(expected) OP_IRLib_DATA_ERROR_MESSAGE(F("Data space "),offset,rawbuf[offset],expected);
+#define TRAILER_BIT_ERROR(expected) OP_IRLib_DATA_ERROR_MESSAGE(F("RC5/RC6 trailer bit length "),offset,rawbuf[offset],expected);
 #else
 #define OP_IRLib_ATTEMPT_MESSAGE(s)
 #define OP_IRLib_TRACE_MESSAGE(s)

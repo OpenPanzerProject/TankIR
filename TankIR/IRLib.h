@@ -45,11 +45,10 @@
 #include <avr/interrupt.h>
 #include "IRLibMatch.h"
 
-
-// If IRLIB_TRACE is defined, some debugging information about the decode will be printed
+// If OP_IRLib_TRACE is defined, some debugging information about the decode will be printed
 // IRLIB_TEST must be defined for the IRtest unit tests to work.  It will make some
 // methods virtual, which will be slightly slower, which is why it is optional.
-// #define IRLIB_TRACE
+// #define OP_IRLib_TRACE
 // #define IRLIB_TEST
 
 /* If not using either DumpResults methods of IRdecode nor IRfrequency you can

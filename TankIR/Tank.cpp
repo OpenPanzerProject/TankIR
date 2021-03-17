@@ -312,7 +312,7 @@ boolean TwoShotHit = false;
         {   // Now we have to decode the signal, and see if it applies to us
             
             // For testing
-                //IR_Decoder.decode();
+                //IR_Decoder.decode(BattleSettings.IR_FireProtocol);
                 //Serial.print(F("Decoded: ")); Serial.print(ptrIRName(IR_Decoder.decode_type)); Serial.print(F(" Value: ")); Serial.println(IR_Decoder.value);
                 //IR_Decoder.DumpResults();
     
