@@ -638,7 +638,7 @@ void OP_Tank::HitLEDs_Off(void)
 void OP_Tank::HitLEDs_Toggle(void)
 {
     HitLEDsOn ? HitLEDs_Off() : HitLEDs_On();
-    HitLEDsOn != HitLEDsOn;
+    HitLEDsOn = !HitLEDsOn;
 }
 void OP_Tank::HitLEDs_SetDim(uint8_t level)
 {
@@ -917,6 +917,3 @@ void OP_Tank::HitLEDs_Repair(void)
     // For next time
     Interval -= Subtract;    
 }
-
-
-

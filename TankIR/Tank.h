@@ -46,7 +46,7 @@
 
 // There are four possible weight classes - the three standard Tamiya classes, 
 // and one custom class defined by the user. 
-typedef char WEIGHTCLASS; 
+typedef unsigned char WEIGHTCLASS; 
 #define WC_CUSTOM       0
 #define WC_LIGHT        1
 #define WC_MEDIUM       2
@@ -56,7 +56,7 @@ const __FlashStringHelper *ptrWeightClassName(WEIGHTCLASS wClass); //Returns a c
 
 
 // See the Damage function in OP_Tank.cpp for definitions
-typedef char DAMAGEPROFILES;
+typedef unsigned char DAMAGEPROFILES;
 #define TAMIYA_DAMAGE       0       // Stock Tamiya damage profile
 #define OPENPANZER_DAMAGE   1       // Open Panzer damage profile
 //#define ADDITIONAL (number)

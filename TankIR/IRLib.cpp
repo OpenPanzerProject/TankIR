@@ -1916,4 +1916,3 @@ byte OP_IRLIB_DATA_ERROR_MESSAGE(const __FlashStringHelper * s, unsigned char in
  Serial.print(F(" expected:")); Serial.println(expected,DEC); return false;
 };
 #endif
-

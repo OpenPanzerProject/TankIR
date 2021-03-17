@@ -74,7 +74,7 @@
 #define BLINKLED_OFF() (PORTB &= B11011111)
 
 // IR PROTOCOLS DEFINED
-typedef char IRTYPES; 
+typedef unsigned char IRTYPES; 
 #define IR_UNKNOWN          0       // Unknown and disabled are the same value!
 #define IR_DISABLED         0       // Unknown and disabled are the same value!
 #define IR_TAMIYA           1       // Tamiya should always be number 1
@@ -97,7 +97,7 @@ typedef char IRTYPES;
 const __FlashStringHelper *ptrIRName(IRTYPES Type); //Returns a character string that is name of protocol.
 
 // TEAM DEFINITIONS
-typedef char IRTEAMS;
+typedef unsigned char IRTEAMS;
 #define IR_TEAM_NONE           0
 #define IR_TEAM_FOV_1          0    // FOV Team 1 we treat as TEAM_NONE. We can use IR_TEAM_FOV_1 in code but it will equal IR_TEAM_NONE
 #define IR_TEAM_FOV_2          1    

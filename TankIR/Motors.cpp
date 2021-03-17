@@ -34,7 +34,6 @@ void Motor::cut_SpeedPct(uint8_t cut_pct)
 void Motor::set_MaxSpeedPct(uint8_t max_pct)
 {
     if (max_pct > 100) return;                          // Max speed can't exceed 100
-    max_pct = constrain(max_pct, 0, 100);
     this->cut_SpeedPct(100-max_pct);
 }
 
@@ -98,4 +97,3 @@ void Servo_RECOIL::setLimits(uint16_t min, uint16_t max)
     this->setMinPulseWidth(ESC_Position, min);
     this->setMaxPulseWidth(ESC_Position, max);
 }
-

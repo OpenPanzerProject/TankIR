@@ -194,11 +194,11 @@ const PROGMEM uint16_t IBU2RepairSig[IBU2_BITS] = {10000,5000,15000,10000};
 #ifdef OP_IRLib_TRACE
 void OP_IRLib_ATTEMPT_MESSAGE(const __FlashStringHelper * s) 
 { 
-    Serial.print("Attempt decode of: "); Serial.println(s); 
+    Serial.print(F("Attempt decode of: ")); Serial.println(s); 
 }
 void OP_IRLib_TRACE_MESSAGE(const __FlashStringHelper * s) 
 { 
-    Serial.print("Trace :"); Serial.println(s); 
+    Serial.print(F("Trace :")); Serial.println(s); 
 }
 byte OP_IRLib_REJECTION_MESSAGE(const __FlashStringHelper * s)
 {
@@ -206,7 +206,7 @@ byte OP_IRLib_REJECTION_MESSAGE(const __FlashStringHelper * s)
 }
 byte OP_IRLib_DATA_ERROR_MESSAGE(const __FlashStringHelper * s, unsigned char index, unsigned int value, unsigned int expected)
 {
-    Serial.print(s); Serial.print(" error at offset: "); Serial.print(index); Serial.print(" with value: "); Serial.print(value); Serial.print(" Expected: "); Serial.println(expected); 
+    Serial.print(s); Serial.print(F(" error at offset: ")); Serial.print(index); Serial.print(F(" with value: ")); Serial.print(value); Serial.print(F(" Expected: ")); Serial.println(expected); 
 }
 
 #define RAW_COUNT_ERROR OP_IRLib_REJECTION_MESSAGE(F("Number of raw samples"));

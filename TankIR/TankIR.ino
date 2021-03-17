@@ -126,7 +126,7 @@ void setup()
     // We still pass an external min/max speed although it won't be used for this object. 
     // What will be used are recoil/return times, along with a reverse setting if the servo needs to be reversed. These can be modified
     // later but will be initialized to sensible defaults.
-        ESC_POS_t SERVONUM_RECOIL = 0;  // Recoil servo is servo #0 (Port B0)
+        ESC_POS_t SERVONUM_RECOIL = (ESC_POS_t)0;  // Recoil servo is servo #0 (Port B0)
         RecoilServo = new Servo_RECOIL (SERVONUM_RECOIL,MOTOR_MAX_REVSPEED,MOTOR_MAX_FWDSPEED,0,RECOIL_MS,RETURN_MS,REVERSE_RECOIL);  
         // Recoil servos also have custom end-points. Because RecoilServo is a motor of class Servo, we can call setMin/MaxPulseWidth from the servo class directly, rather than from TankServos
         RecoilServo->setMinPulseWidth(SERVONUM_RECOIL, RECOIL_SERVO_EP_MIN);
@@ -175,15 +175,7 @@ void loop()
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
 // Battle Variables
     static boolean Alive = true;                                      // Has the tank been destroyed? If so, Alive = false
-    static int DestroyedBlinkerID = 0;                                // Timer ID for blinking lights when tank is destroyed
     HIT_TYPE HitType;                                                 // If we were hit, what kind of hit was it
-// Blinkers
-    static int GreenBlinker = 0;
-    static int RedBlinker = 0;
-// Time Variables
-    static unsigned long currentMillis; 
-// Timing stuff
-    currentMillis = millis(); 
 // Button stuff
     enum {BUTTON_WAIT, BUTTON_TO_WAIT};       
     static uint8_t ButtonState;                                       //The current button state machine state
@@ -589,5 +581,3 @@ float Convert_mS_to_Sec(int mS)
 {
     return float(mS) / 1000.0;
 }
-
-
