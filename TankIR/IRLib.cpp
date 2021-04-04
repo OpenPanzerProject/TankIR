@@ -715,7 +715,7 @@ boolean nextMarkLong;
     else return false;
 }
 bool IRdecodeOpenPanzer::decode(void) {
-    uint32_t data = 0;
+    // uint32_t data = 0;
     OP_IRLib_ATTEMPT_MESSAGE(F("OpenPanzer"));   
 
     // Placeholder for future expansion
@@ -1119,6 +1119,9 @@ ISR(INT0_vect)
                 // it was on, and is now off. Somehow we missed it turning on. Wait for the next on. 
                 return; 
             }
+            break;
+
+        default:
             break;
     };
     

@@ -72,14 +72,14 @@ typedef char HIT_TYPE;
 #define HIT_TYPE_REPAIR     3
 
 // A collection of settings for the tank
-typedef struct weightClassSettings{
+struct weightClassSettings{
     uint16_t reloadTime;        // How long (in mS) does it take to reload the cannon. Depends on weight class
     uint16_t recoveryTime;      // How long does recovery mode last (invulnerability time when tank is regenerating after being destroyed). Class-dependent. 
     uint8_t  maxHits;           // How many hits can the tank sustain before being destroyed. Depends on weight class
     uint8_t  maxMGHits;         // How many hits can the tank sustain from machine gun fire before being destroyed. Only applies to custom weight classes, 
                                 // and only if Accept_MG_Damage = TRUE
 };
-typedef struct battle_settings{
+struct battle_settings{
     char     WeightClass;       // What is the tank's current weight class
     weightClassSettings ClassSettings;  // What are the settings for the weight class (max hits, reload time, recovery time)
     IRTYPES  IR_FireProtocol;   // Which battle protocol are we *sending* by cannon fire
@@ -115,7 +115,7 @@ class OP_Tank
         static uint8_t  PctDamaged(void);           // Returns a number from 0-100 of the percent damage taken
         static uint8_t  PctHealthRemaining(void);   // Returns a number from 0-100 of the percent of health remaining
         static boolean  isRepairOngoing(void);      // Returns the status of a repair operation
-        static void     Damage();                   // 
+//        static void     Damage();                   // NOTE: The Standalone IR board does not have a speed to be reduced, therefore we have no "damage" function
         static battle_settings BattleSettings;      // Battle settings struct
         static boolean  isInvulnerable;             // Is the tank presently invulnerable to incoming fire
         static boolean  isDestroyed;                // Is the tank destroyed

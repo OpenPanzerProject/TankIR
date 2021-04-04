@@ -567,9 +567,12 @@ void OP_Tank::EnableHitReception(void)
 }
 
 
-// Cut speed to motors (ie, "damage"). 
+// Cut speed to motors (ie, "damage"). NOTE: Since this is the Standalone IR project, we are by definition not a vehicle with speed that can be reduced. 
+//                                     Therefore, this damage function does nothing. 
+/*
 void OP_Tank::Damage()
 {
+  
 int cut_Pct;
 
     switch (BattleSettings.DamageProfile)
@@ -585,14 +588,13 @@ int cut_Pct;
             // 5. If the number of hits taken equals the max number of hits allowed, the tank is destroyed. 
             // Because this formula only needs to know the max number of hits allowed, we can easily apply it to any custom weight class the
             // user may create, as well as the standard Tamiya classes: 
-            /*
-            MaxHits = BattleSettings.ClassSettings.maxHits;     // The max number of hits for this weight class
-            Halfway = round(float(MaxHits-1)/2.0);              // The Tamiya formula to calculate Halfway
-            if      (hitsTaken <= Halfway) { cut_Pct = 50;  }   // Reduce speed to 50%
-            else if (hitsTaken <  MaxHits) { cut_Pct = 75;  }   // Reduce speed to 25% (cut by 75%)
-            else                           { cut_Pct = 100; }   // Destroyed (cut by 100%)
-            */
             
+            // MaxHits = BattleSettings.ClassSettings.maxHits;     // The max number of hits for this weight class
+            // Halfway = round(float(MaxHits-1)/2.0);              // The Tamiya formula to calculate Halfway
+            // if      (hitsTaken <= Halfway) { cut_Pct = 50;  }   // Reduce speed to 50%
+            // else if (hitsTaken <  MaxHits) { cut_Pct = 75;  }   // Reduce speed to 25% (cut by 75%)
+            // else                           { cut_Pct = 100; }   // Destroyed (cut by 100%)
+
             // EDIT: Well, that's the way Tamiya does it, but if you want to include machine gun damage, we need a slightly different approach. 
             // This should give us the same result as the Tamiya approach, but also allow damage due to machine gun fire. 
             if      (DamagePct <= 0.0)                          cut_Pct = 0;
@@ -604,9 +606,16 @@ int cut_Pct;
             // Serial.print(100-cut_Pct);
             // Serial.println(F("%"));
             break;
+          
+        default:
+            cut_Pct = 0; 
+            break;
+          
     }
 
 }
+*/
+
 void OP_Tank::ResetBattle(void)
 {
     // This function is called when the tank is "regenerating" or "recovering" after being destroyed (or when the TCB has just rebooted). 

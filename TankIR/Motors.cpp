@@ -79,17 +79,6 @@ void Servo_RECOIL::begin(void)
 // We also don't need a "Recoil" method because that is exposed by being a member of the OP_Servos class. Just call
 // Servo_RECOIL(object).Recoil();
 
-void Servo_RECOIL::setSpeed(int s)
-{
-    // This function does nothing
-    return;
-}
-
-void Servo_RECOIL::stop(void)
-{
-    // This function does nothing
-    return;
-}
 
 // This sets limits on the servo object, rather than the motor's internal range. 
 void Servo_RECOIL::setLimits(uint16_t min, uint16_t max)

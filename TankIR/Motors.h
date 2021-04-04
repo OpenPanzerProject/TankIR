@@ -17,7 +17,7 @@
 
 // ESC Position type. Motor controllers we will be using (including the onboard L298) are all dual, so we have SIDEA and SIDEB.
 // We can also use servo outputs to control speed controllers, there are 8 possible positions for those. 
-typedef enum ESC_POS_t
+enum ESC_POS_t
 {   
     SERVO_1 = 0,
 };
@@ -83,9 +83,7 @@ class Motor {
     }   
     
     int getSpeed(void) { return this->curspeed; }
-    virtual void setSpeed(int) =0;                  // Purely virtual
-    virtual void begin(void) =0;
-    virtual void stop(void) =0;
+    virtual void begin(void) =0;            // Purely virtual
     virtual void update(void) =0;
 };
 
@@ -107,8 +105,3 @@ class Servo_RECOIL: public Motor, public OP_Servos {
 
 
 #endif //OP_Motors_h
-
-
-
-
-
