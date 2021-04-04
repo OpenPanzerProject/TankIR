@@ -1,6 +1,6 @@
 # Standalone Tank IR 
 
-The files in the TankIR folder consist of an Arduino sketch that can be loaded onto any Arduino Duemilanove/Uno/Nano or other board with an ATmega328 processor. 
+The files in the TankIR folder consist of an Arduino sketch that can be loaded onto any Arduino Duemilanove/Uno/Nano or other board with an ATmega328 processor. (In the Arduino IDE, go to the Tools menu and under the Board section select "Arduino Nano" or "Arduino AVR Boards -> Arduino Nano")
 
 With the addition of an IR receiver and emitter this sketch can send and receive any RC tank protocol. 
 
@@ -14,6 +14,14 @@ Several configuration settings are available in the "A_Setup.h" file (it will ap
 
 Leave your Arduino attached to your computer with a USB cable and open the Serial Monitor from within the Arduino IDE to see informational messages printed during operation. 
 
+# Compiling Firmware
+For reasons that were never fully identified, this project will only compile with certain versions of the Arduino IDE. If the wrong version is used, it will compile with global memory usage over 90%, with the warning "Low memory available, stability problems may occur." And indeed, stability problems will occur. 
+
+Therefore, to be successful you have two options. In both cases you are still going to compile for the Arduino Nano (in the IDE select Tools -> Board -> Arduino AVR Boards -> Arduino Nano).
+1. Compile with Arduino IDE 1.8.5 ([the download can be found here](https://www.arduino.cc/en/main/OldSoftwareReleases)). 
+2. Or you can compile with a newer version of the IDE (up to 1.8.13 have been tested), but after you open the IDE, go to the Tools menu and select Board->Boards Manager. Wait for the Boards information to load, then under the AVR Boards section click the drop-down box to select a different boards version. Select version 1.6.20 (not 1.6.2) and then click Install. After installation has completed, click Close to close the Boards Manager, and then compile. 
+
+The compiled code size should show global memory usage somewhere in the 70% range with no wraning about instability problems. [See this thread]http://openpanzer.org/forum/index.php?topic=19.0) for a further dicussion of this issue. 
 
 # Hardware Notes
 
