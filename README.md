@@ -21,7 +21,7 @@ Therefore, to be successful you have two options. In both cases you are still go
 1. Compile with Arduino IDE 1.8.5 ([the download can be found here](https://www.arduino.cc/en/main/OldSoftwareReleases)). 
 2. Or you can compile with a newer version of the IDE (up to 1.8.13 have been tested), but after you open the IDE, go to the Tools menu and select Board->Boards Manager. Wait for the Boards information to load, then under the AVR Boards section click the drop-down box to select a different boards version. Select version 1.6.20 (not 1.6.2) and then click Install. After installation has completed, click Close to close the Boards Manager, and then compile. 
 
-The compiled code size should show global memory usage somewhere in the 70% range with no wraning about instability problems. [See this thread](http://openpanzer.org/forum/index.php?topic=19.0) for a further dicussion of this issue. 
+The compiled code size should show global memory usage somewhere in the 70% range with no wraning about instability problems. [See this thread](https://openpanzer.org/forum/index.php?topic=19.0) for a further dicussion of this issue. 
 
 # Hardware Notes
 
