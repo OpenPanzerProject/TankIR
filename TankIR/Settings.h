@@ -78,11 +78,12 @@
 // ------------------------------------------------------------------------------------------------------------------------------------------------------->>
     
     // Pushbutton
-        #define pin_Button               4          // Input    - Input pushbutton, used to fire the cannon manually
+        #define pin_Button               4          // Input    - Input pushbutton, can be used to fire the cannon manually
 
     // Positive voltage input
-        #define pin_VoltageTrigger      A0          // Input    - Apply a positive 5v signal to this pin to fire the cannon
+        #define pin_VoltageTrigger      A0          // Input    - Apply a positive 5v signal to this pin to fire the cannon (can be taken from a Heng Long/Taigen/Tamiya or other kind of MFU)
                                                     //            This needs to be one of the pins between A0 and A5 or else you will need to change the interrupt code
+                                                    //            Also place a resistor between this pin and Ground, or else the cannon may fire randomly! See the TankIR_Schematic.pdf
 
     // Board LEDs
         #define pin_BoardLED            13          // Output   - Green LED on Arduino boards
