@@ -5,7 +5,7 @@ The files in the TankIR folder consist of an Arduino sketch that can be loaded o
 With the addition of an IR receiver and emitter this sketch can send and receive any RC tank protocol. 
 
 # Hardware Notes 
-Included in the project filesis a simple schematic in PDF format, please review it for wiring details. An Arduino Nano is shown but the pins are the same for the Uno.
+Included in the project files is a simple schematic in PDF format, please review it for wiring details. An Arduino Nano is shown but the pins are the same for the Uno.
 
 ## To trigger the cannon fire:
   * Manually - connect a pushbutton between Arduino pin D4 and ground.
@@ -77,19 +77,20 @@ Now once again go to the Tools menu and select Board -> Boards Manager. Wait for
 
 The compiled code size should show global memory usage somewhere in the 70% range with no warning about instability problems. [See this thread](https://openpanzer.org/forum/index.php?topic=19.0) for a further dicussion of this issue. 
 
-# Firmware Settings
+## Firmware Settings
 Within the sketch is a file called "A_Setup.h" (it will appear as a tab in your Arduino editor). That is where all user settings can be adjusted. Recoil servo, IR protocol selection, "weight class" and other settings are defined here. There are extensive notes in this file so just read through it and it should be self-explanatory. 
 
-# Troubleshooting
+## Troubleshooting
 Leave your Arduino attached to your computer with a USB cable and open the Serial Monitor from within the Arduino IDE to see informational messages printed during operation.
 
 
-## Example project
+# Example project
 See this thread over at RC Tank Warfare where this project is interfaced with a standard Heng Long board to add Tamiya IR compatibility: [Arduino UNO IR Battle System](https://www.rctankwarfare.co.uk/forums/viewtopic.php?f=81&t=21941).
 
 See also this RC Tank Warfare thread: [How to build a working IR Artillery Gun](https://www.rctankwarfare.co.uk/forums/viewtopic.php?f=208&t=22849)
 
-## License
+
+# License
 All Open Panzer firmware is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License version 3 as published by the Free Software Foundation.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
