@@ -67,7 +67,8 @@ OP_Tank::OP_Tank()
     isDestroyed = false;        
     CannonHitsTaken = 0;        
     MGHitsTaken = 0;
-    DamagePct = 0;    
+    DamagePct = 0;   
+    if (CANNON_RELOAD_NOTIFY) HitLEDs_ReloadNotify();   // If enabled, briefly blink the apple notification LEDs to signify reload is complete. 
     DisableHitReception();                      // We start by ignoring hits
     IR_Rx = new IRrecvPCI(IR_RECEIVE_INT_NUM);  // Pass the external interrupt number to the IRrecvPCI class (Arduino Interrupt 0 on the TCB - see OP_Tank.h)
     IR_Rx->setBlinkingOnReceive(true);        // For testing only. This will cause the board LED to flash on any IR reception, whether the IR can be decoded or not.
@@ -654,6 +655,11 @@ void OP_Tank::HitLEDs_SetDim(uint8_t level)
     analogWrite(pin_HitNotifyLEDs, level);
     level > 0 ? HitLEDsOn = true : HitLEDsOn = false;
 }
+void OP_Tank::HitLEDs_Blink(long blinkTime)
+{
+    digitalWrite(pin_HitNotifyLEDs, HIGH);
+    TankTimer->setTimeout(blinkTime, HitLEDs_Off);    
+}
 
 //------------------------------------------------------------------------------------------------------------------------>>
 // HIT NOTIFICATION LEDs - CANNON HIT
@@ -925,4 +931,14 @@ void OP_Tank::HitLEDs_Repair(void)
 
     // For next time
     Interval -= Subtract;    
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------>>
+// HIT NOTIFICATION LEDs CANON RELOADED - Short blink to notify  user the canon reload time has completed
+//                                        Can be enabled/disabled with setting CANNON_RELOAD_NOTIFY on the A_Setup.h tab
+//------------------------------------------------------------------------------------------------------------------------>>
+void OP_Tank::HitLEDs_ReloadNotify(void)
+{   
+    HitLEDs_Blink(250);
 }

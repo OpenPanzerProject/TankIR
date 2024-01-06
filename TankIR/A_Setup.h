@@ -16,6 +16,13 @@
     #define RECOIL_SERVO_EP_MAX     2000                    // << --- SET ME - Don't exceed anything sane (~800 - ~2200)
 
 
+    // NOTIFICATION LED
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->>
+    // 
+    #define CANNON_RELOAD_NOTIFY    false                   // << --- SET ME - set to True to blink the IR apple notification LEDs when canon reload time has transpired (CUSTOM_CANNON_RELOAD below)
+    
+    
+    
     // IR TYPE - FIGHT OR REPAIR
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->>
 
@@ -128,6 +135,4 @@
 
 
 
-
     
-

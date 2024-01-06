@@ -162,6 +162,7 @@ class OP_Tank
         static void     HitLEDs_Off(void);
         static void     HitLEDs_Toggle(void);
         static void     HitLEDs_SetDim(uint8_t level);
+        static void     HitLEDs_Blink(long blinkTime);
         static void     HitLEDs_CannonHit(void);    // Cannon-hit damage light effect
         static void     CannonHitLEDs_Update(void);
         static void     CannonHitLEDs_Stop(void);
@@ -175,6 +176,7 @@ class OP_Tank
         static boolean  FadeOut;
         static int      FadeStep_TimerID;
         static int      HitLED_TimerID;
+        static void     HitLEDs_ReloadNotify(void); // Blink on cannon reload, if enabled in A_Setup.h   
 
         // Damage/Repair
         static uint8_t  HitsTaken_Cannon;           // How many hits have we sustained
