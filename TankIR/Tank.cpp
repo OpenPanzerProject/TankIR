@@ -67,8 +67,7 @@ OP_Tank::OP_Tank()
     isDestroyed = false;        
     CannonHitsTaken = 0;        
     MGHitsTaken = 0;
-    DamagePct = 0;   
-    if (CANNON_RELOAD_NOTIFY) HitLEDs_ReloadNotify();   // If enabled, briefly blink the apple notification LEDs to signify reload is complete. 
+    DamagePct = 0;     
     DisableHitReception();                      // We start by ignoring hits
     IR_Rx = new IRrecvPCI(IR_RECEIVE_INT_NUM);  // Pass the external interrupt number to the IRrecvPCI class (Arduino Interrupt 0 on the TCB - see OP_Tank.h)
     IR_Rx->setBlinkingOnReceive(true);        // For testing only. This will cause the board LED to flash on any IR reception, whether the IR can be decoded or not.
@@ -262,6 +261,8 @@ void OP_Tank::Cannon_StartReload(void)
 void OP_Tank::ReloadComplete(void)
 {
     CannonReloadComplete = true;
+    if (CANNON_RELOAD_NOTIFY) HitLEDs_ReloadNotify();   // If enabled, briefly blink the apple notification LEDs to signify reload is complete. 
+    Serial.println(F("Canon reloaded"));   
 }
 boolean OP_Tank::CannonReloaded(void)
 {
@@ -658,7 +659,7 @@ void OP_Tank::HitLEDs_SetDim(uint8_t level)
 void OP_Tank::HitLEDs_Blink(long blinkTime)
 {
     digitalWrite(pin_HitNotifyLEDs, HIGH);
-    TankTimer->setTimeout(blinkTime, HitLEDs_Off);    
+    TankTimer->setTimeout(blinkTime, HitLEDs_Off); 
 }
 
 //------------------------------------------------------------------------------------------------------------------------>>
@@ -940,5 +941,5 @@ void OP_Tank::HitLEDs_Repair(void)
 //------------------------------------------------------------------------------------------------------------------------>>
 void OP_Tank::HitLEDs_ReloadNotify(void)
 {   
-    HitLEDs_Blink(250);
+    HitLEDs_Blink(400);
 }

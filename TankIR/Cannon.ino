@@ -8,6 +8,9 @@ ISR (PCINT1_vect)
 {
     static unsigned long last_interrupt_time = 0;
     unsigned long interrupt_time = millis(); 
+
+    // But if we have disabled this functionality, just exit. In fact in that case this code shouldn't even run, because the interrupt won't have been enabled.
+    if (USE_5VOLT_TRIGGER == false) return;
     
     // Check if the pin is high, and if it has been more than some minimum length of time since the last interrupt
     if (digitalRead(pin_VoltageTrigger) == HIGH &&  (interrupt_time - last_interrupt_time > 250))   // 250 mS = 1/4 second
@@ -53,6 +56,3 @@ void FireCannon()
         }
     }
 }
-
-
-

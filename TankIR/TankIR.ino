@@ -38,11 +38,11 @@
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
 
 // SIMPLE TIMER 
-    OP_SimpleTimer timer;                        // SimpleTimer named "timer"
+    OP_SimpleTimer timer;                                   // SimpleTimer named "timer"
     boolean TimeUp = true;
 
 // DEBUG FLAG
-    boolean DEBUG = true;                        // Whether or no to send informational messages out the serial port during routine operation
+    boolean DEBUG = true;                                   // Whether or no to send informational messages out the serial port during routine operation
 
 // TANK OBJECTS
     OP_Servos TankServos;
@@ -52,10 +52,10 @@
     // We always have a recoil servo
         Servo_RECOIL * RecoilServo;
 // REPAIR
-    #define REPAIR_NONE     0                     // No repair operation ongoing
-    #define REPAIR_SELF     1                     // We are being repaired by another tank
-    #define REPAIR_OTHER    2                     // We are repairing another tank
-    uint8_t RepairOngoing = REPAIR_NONE;          // Init 
+    #define REPAIR_NONE     0                               // No repair operation ongoing
+    #define REPAIR_SELF     1                               // We are being repaired by another tank
+    #define REPAIR_OTHER    2                               // We are repairing another tank
+    uint8_t RepairOngoing = REPAIR_NONE;                    // Init 
 
 // INPUT BUTTON
     OP_Button InputButton = OP_Button(pin_Button, true, true, 25);              // Initialize a button object. Set pin, internal pullup = true, inverted = true, debounce time = 25 mS
@@ -67,29 +67,37 @@ void setup()
 
     // INIT SERIALS & COMMS
     // -------------------------------------------------------------------------------------------------------------------------------------------------->
-        Serial.begin(USB_BAUD_RATE);                               // Hardware Serial 0 - Connected to FTDI/USB connector
+        Serial.begin(USB_BAUD_RATE);                       // Hardware Serial 0 - Connected to FTDI/USB connector
 
     // PINS 
     // -------------------------------------------------------------------------------------------------------------------------------------------------->
         // These pins are defined in Settings.h
 
-        // Pushbutton - held to ground when pushed
-            pinMode(pin_Button, INPUT_PULLUP);      // Input    - Pushbutton input
+        // Pushbutton - held to ground when pushed, or accepts a ground-switched signal from some other MFU
+            pinMode(pin_Button, INPUT_PULLUP);              // Input    - Pushbutton input
 
-        // Positive voltage trigger - goes high when activated
-            pinMode(pin_VoltageTrigger, INPUT);     // Input    - In this case we do NOT want the pullup resistor enabled. 
-            digitalWrite(pin_VoltageTrigger, LOW);  //          - This statement makes certain the internal pullup is disconnected. We will use an external pull-down resistor (to ground)
-                                                    //            to keep the pin negative until a signal is received. 
-            // Now setup a pin change interrupt on this pin
-            *digitalPinToPCMSK(pin_VoltageTrigger) |= bit (digitalPinToPCMSKbit(pin_VoltageTrigger));       // enable pin change interrupt
-            PCIFR  |= bit (digitalPinToPCICRbit(pin_VoltageTrigger));                                       // clear any outstanding interrupt
-            PCICR  |= bit (digitalPinToPCICRbit(pin_VoltageTrigger));                                       // enable interrupt for the group
+        // Positive voltage trigger - accepts a 5v signal from another device
+            if (USE_5VOLT_TRIGGER)
+            {
+                pinMode(pin_VoltageTrigger, INPUT);         // Input    - In this case we do NOT want the pullup resistor enabled. 
+                digitalWrite(pin_VoltageTrigger, LOW);      //          - This statement makes certain the internal pullup is disconnected. We will use an external pull-down resistor (to ground)
+                                                            //            to keep the pin negative until a signal is received.
+                // Now setup a pin change interrupt on this pin
+                *digitalPinToPCMSK(pin_VoltageTrigger) |= bit (digitalPinToPCMSKbit(pin_VoltageTrigger));       // enable pin change interrupt
+                PCIFR  |= bit (digitalPinToPCICRbit(pin_VoltageTrigger));                                       // clear any outstanding interrupt
+                PCICR  |= bit (digitalPinToPCICRbit(pin_VoltageTrigger));                                       // enable interrupt for the group
+            }                                               
+            else
+            {
+                pinMode(pin_VoltageTrigger, INPUT_PULLUP);  // Input    - Although in this case we are not using this input, we set it to INPUT_PULLUP for safety
+                                                            //            And of course, we don't assign any interrupt to this pin. 
+            }
    
         // LEDs and Lights
-            pinMode(pin_BoardLED, OUTPUT);          // Output   - Green LED (LED on Arduino boards)
+            pinMode(pin_BoardLED, OUTPUT);                  // Output   - Green LED (LED on Arduino boards)
             BoardLedOff();
-            pinMode(pin_HitNotifyLEDs, OUTPUT);     // Output   - Hit notification LEDs if using the Tamiya apple. Tank class will initialize to off. 
-            pinMode(pin_MuzzleFlash, OUTPUT);       // Output   - Use to trigger a Taigen high-intensity Flash Unit
+            pinMode(pin_HitNotifyLEDs, OUTPUT);             // Output   - Hit notification LEDs if using the Tamiya apple. Tank class will initialize to off. 
+            pinMode(pin_MuzzleFlash, OUTPUT);               // Output   - Use to trigger a Taigen high-intensity Flash Unit
 
         // Audio FX triggers
             pinMode(pin_FIRE_CANNON_TRIGGER, OUTPUT);
@@ -321,5 +329,3 @@ void loop()
             Serial.println(F("TANK RESTORED")); 
     }
 }
-
-

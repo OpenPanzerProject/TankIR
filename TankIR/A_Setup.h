@@ -6,6 +6,25 @@
 // THIS IS WHERE YOU SET UP THE DEVICE TO YOUR LIKING. 
 
 
+    // CANNON TRIGGER - 5 VOLT SIGNAL OPTION (cannon will trigger when 5 volt signal is detected on pin A0)
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->>    
+    
+    #define USE_5VOLT_TRIGGER       false                   // << --- SET ME - If you wish to use the 5 volt input (on pin A0) to trigger the cannon fire, set this to true. Make sure you 
+                                                            //                 also attach a resistor of ~10k value from pin A0 to ground as shown in the sample schematic, this will keep the  
+                                                            //                 input tied low until a 5v signal is received. BUT, if you are only going to use the button/negative trigger, 
+                                                            //                 then set this to false, otherwise the cannon may fire randomly on its own. No resistor is needed if set to false. 
+                                                            
+
+    
+    // CANNON TRIGGER - GROUND SIGNAL OPTION (cannon will trigger when pin D4 is held to ground - this can be from a push button as shown in the schematic, or another device)
+    // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->>    
+    
+    // This option is always enabled, there is nothing to adjust here. If you want to use this trigger method, connect a push-button between pin D4 and ground, when the button is pressed, 
+    // the cannon will fire. Alternatively, if you are using this circuit in conjunction with one of the common MFUs from Heng Long, Taigen, etc, they typically have ground-switched signals 
+    // which can be attached here to trigger the cannon (for example the airsoft signal). No resistor is needed, just make sure the MFU and the Arduino share a common ground connection. 
+
+
+                                                            
     // RECOIL SERVO
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->>    
     
@@ -19,8 +38,7 @@
     // NOTIFICATION LED
     // --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->>
     // 
-    #define CANNON_RELOAD_NOTIFY    false                   // << --- SET ME - set to True to blink the IR apple notification LEDs when canon reload time has transpired (CUSTOM_CANNON_RELOAD below)
-    
+    #define CANNON_RELOAD_NOTIFY    true                   // << --- SET ME - set to True to blink the IR apple notification LEDs when canon reload time has transpired (CUSTOM_CANNON_RELOAD below)
     
     
     // IR TYPE - FIGHT OR REPAIR
