@@ -405,7 +405,7 @@ boolean TwoShotHit = false;
                     // After that time it will automatically recover itself. During invulnerability time, the tank can fire but is impervious to enemy fire. 
                     // Invulnerabilty time is dependent on the weight class. 
                     isDestroyed = true;
-                    TankTimer->setTimeout(DESTROYED_INOPERATIVE_TIME_mS, ResetBattle);   // DESTROYED_INOPERATIVE_TIME_mS is defined in OP_BattleTimes.h
+                    TankTimer->setTimeout(DESTROYED_INOPERATIVE_TIME_mS, ResetBattle);   // DESTROYED_INOPERATIVE_TIME_mS is defined in Tank.h
                     // Start the destroyed light effect
                     HitLEDs_CannonHit();    // After the cannon hit effect, because isDestroyed is true, the subsequent HitLEDs_Destroyed effect will start automatically
                 }

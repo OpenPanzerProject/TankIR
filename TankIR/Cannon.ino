@@ -28,30 +28,33 @@ ISR (PCINT1_vect)
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>>
 void FireCannon()
 {
-    if (Tank.CannonReloaded())          // Only fire if reloading is complete
-    {   
-        if (Tank.isRepairTank()) 
+    if (!Tank.isDestroyed)                  // We can't fire the gun if we're destroyed (not the same as invulnerability time, which comes after respawn: we are allowed to fire then)
+    {    
+        if (Tank.CannonReloaded())          // Only fire if reloading is complete
         {   
-            if (!Tank.isRepairOngoing() && !RepairOngoing)
-            {
-                // If we are a repair tank, we immobilze the tank when firing the repair signal. 
-                // This is very similar to what we do if we *receive* a repair signal
-                RepairOngoing = REPAIR_OTHER;   // This marks the start of a repair operation - we are repairing an other vehicle
-                Serial.println(F("Fire Repair Signal"));
-               
-                // Now fire the repair signal. 
-                Tank.Fire(); 
-                TriggerRepairSound();
+            if (Tank.isRepairTank()) 
+            {   
+                if (!Tank.isRepairOngoing() && !RepairOngoing)
+                {
+                    // If we are a repair tank, we immobilze the tank when firing the repair signal. 
+                    // This is very similar to what we do if we *receive* a repair signal
+                    RepairOngoing = REPAIR_OTHER;   // This marks the start of a repair operation - we are repairing an other vehicle
+                    Serial.println(F("Fire Repair Signal"));
+                   
+                    // Now fire the repair signal. 
+                    Tank.Fire(); 
+                    TriggerRepairSound();
+                }
             }
-        }
-        else
-        {
-            // This is a fighting tank. But we can't fire the cannon if we're in the midst of being repaired by another tank.
-            if (!Tank.isRepairOngoing())
+            else
             {
-                Serial.println(F("Fire Cannon"));  
-                Tank.Fire(); // See OP_Tank library. This starts the servo recoil, triggers the high intensity flash unit, and it sends the IR signal
-                TriggerCannonSound();
+                // This is a fighting tank. But we can't fire the cannon if we're in the midst of being repaired by another tank.
+                if (!Tank.isRepairOngoing())
+                {
+                    Serial.println(F("Fire Cannon"));  
+                    Tank.Fire(); // See OP_Tank library. This starts the servo recoil, triggers the high intensity flash unit, and it sends the IR signal
+                    TriggerCannonSound();
+                }
             }
         }
     }
